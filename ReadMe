@@ -1,0 +1,54 @@
+1. Prerequisites
+Before you start, ensure you have Node.js installed (version 18, 20, or 22+ is recommended).
+
+Check your version: node -v
+
+Use Visual Studio Code (VS Code) for the best experience.
+
+2. Initialize the Project
+The easiest way to set everything up (including TypeScript config) is the official initializer.
+
+Open your terminal and create a new directory:
+
+Bash
+mkdir playwright-automation && cd playwright-automation
+Run the installer:
+
+Bash
+npm init playwright@latest
+Choose these options when prompted:
+
+Language: TypeScript
+
+Name of your tests folder: tests
+
+Add a GitHub Actions workflow? Yes (recommended for CI/CD)
+
+Install Playwright browsers? Yes
+
+3. Understand the File Structure
+Playwright scaffolds a clean structure for you:
+
+playwright.config.ts: The "brain." Configure browsers (Chromium, Firefox, WebKit), timeouts, and base URLs here.
+
+tests/: Where your .spec.ts files live.
+
+tests-examples/: Contains a demo todo app test (great for learning).
+
+package.json: Manages scripts and dependencies.
+
+4. Running your tests
+Command	                            What it does
+npx playwright test	                Runs all tests in "headless" mode (invisible, fast).
+npx playwright test --headed	    Runs tests and opens the browser so you can watch.
+npx playwright test --ui	        Best for Dev: Opens a UI with "time-travel" debugging.
+npx playwright show-report	        Opens a beautiful HTML report of the last run.
+
+5. Pro Tips for 2026
+Use the VS Code Extension: Search for "Playwright Test" by Microsoft in the marketplace. It lets you run tests by clicking a green "Play" button next to your code.
+
+Codegen: Don't write every locator by hand. Run npx playwright codegen https://example.com to record your actions and generate the TypeScript code automatically.
+
+Page Object Model (POM): As your suite grows, move your locators into separate classes to keep your tests readable and maintainable.
+
+Skip the any type: Since you're using TypeScript, let the IDE help you. Use the built-in types like Page, Locator, and Response.
