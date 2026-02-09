@@ -1,55 +1,21 @@
-import { test, expect } from '@playwright/test';
+import { test } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
+import { AdminPortalHomePage } from '../pages/AdminPortalHomePage';
 
 test.only('Login to Admin Portal Home Page and Navigations', async ({ page }) => {
-  await page.goto('https://dev-adminp-app-gxbac4bjg9hebwgq.westus2-01.azurewebsites.net');
+  const loginPage = new LoginPage(page);
+  const adminPortalHomePage = new AdminPortalHomePage(page);
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Sign in/i);
-  // Look for and Enter Username / Email
-  await page.getByPlaceholder('Email address').fill('vincent.ventura@anytimemailbox.com');
-  // Click Next Button
-  await page.getByRole('button', { name: 'Next' }).click();
-  // Look for and Enter Password
-  await page.getByPlaceholder('Password').fill('Flamingo@03');
+  // Navigate to login page and login
+  await loginPage.navigateToLoginPage();
+  await loginPage.login('atmbtest+Dakota@gmail.com', 'QATuser%20');
 
-  // Click 'Sign in' (use role locator, assert visibility, and wait for navigation)
-  const signIn = page.getByRole('button', { name: 'Sign in' });
-  await expect(signIn).toBeVisible();
-  await Promise.all([
-    page.waitForNavigation(),
-    signIn.click(),
-  ]);
+  // Verify page header elements
+  await adminPortalHomePage.verifyPageHeader();
 
-  // Stay Sign In Click 'Yes' (use role locator, assert visibility, and wait for navigation)
-  const staySignedInYes = page.getByRole('button', { name: 'Yes' });
-  await expect(staySignedInYes).toBeVisible();
-  await Promise.all([
-    page.waitForNavigation(),
-    staySignedInYes.click(),
-  ]);
+  // Verify main menu navigation icons
+  await adminPortalHomePage.verifyMainMenuIcons();
 
-  // Expects page to have a heading with the name of Admin Portal.
-  await expect(page.getByRole('heading', { name: 'Admin Portal' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Anytime Operator Portal' })).toBeVisible();
-  await expect(page.locator('#nav_placeholder')).toContainText('VV');
-
-  //Expect Main Menu Navi gation Links to be Visible
-  await expect(page.locator('i.fa-light.fa-house')).toBeVisible(); // Home Link Icon
-  await expect(page.locator('i.fa-light.fa-users')).toBeVisible(); // Users Link Icon
-  await expect(page.locator('i.fa-light.fa-store')).toBeVisible(); // Vendors Link Icon
-  await expect(page.locator('i.fa-light.fa-badge-percent')).toBeVisible(); // Products Link Icon
-  await expect(page.locator('i.fa-light.fa-money-check-dollar')).toBeVisible(); // Billing Link Icon
-  await expect(page.locator('i.fa-light.fa-user')).toBeVisible(); // User Management Link Icon
-  await expect(page.locator('i.fa-light.fa-server')).toBeVisible(); // System Link Icon
-  await expect(page.locator('i.fa-light.fa-gear')).toBeVisible(); // Settings Link Icon
-
-  // Expect Sub Menu Navigation Links to be Visible
-  const billingIcon = page.locator('i.fa-light.fa-money-check-dollar');
-  await expect(billingIcon).toBeVisible();
-  await billingIcon.click(); // Billing Link Icon
-  await expect(page.getByRole('link', { name: 'Customers' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Operators' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Affiliates' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Enterprises' })).toBeVisible();
-  await expect(page.getByRole('link', { name: 'Batches' })).toBeVisible();
+  // Verify billing sub menu navigation links
+  await adminPortalHomePage.verifyBillingSubMenuLinks();
 });
