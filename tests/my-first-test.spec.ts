@@ -44,10 +44,12 @@ test.only('Login to Admin Portal Home Page and Navigations', async ({ page }) =>
   await expect(page.locator('i.fa-light.fa-gear')).toBeVisible(); // Settings Link Icon
 
   // Expect Sub Menu Navigation Links to be Visible
-  await expect(page.locator('i.fa-light.fa-money-check-dollar')).toBeVisible(); // Billing Link Icon
-  await expect(page.locator('a').filter({ hasText: 'Customers' }).first()).toBeVisible();
-  await expect(page.locator('a').filter({ hasText: 'Operators' }).first()).toBeVisible();
-  await expect(page.locator('a').filter({ hasText: 'Affiliates' }).first()).toBeVisible();
-  await expect(page.locator('a').filter({ hasText: 'Enterprises' }).first()).toBeVisible();
-  await expect(page.locator('a').filter({ hasText: 'Batches' }).first()).toBeVisible();
+  const billingIcon = page.locator('i.fa-light.fa-money-check-dollar');
+  await expect(billingIcon).toBeVisible();
+  await billingIcon.click(); // Billing Link Icon
+  await expect(page.getByRole('link', { name: 'Customers' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Operators' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Affiliates' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Enterprises' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Batches' })).toBeVisible();
 });
